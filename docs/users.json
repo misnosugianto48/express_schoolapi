@@ -1,0 +1,202 @@
+{
+  "openapi": "3.0.2",
+  "info": {
+    "title": "API Spec Users",
+    "version": "1.0",
+    "contact": {
+      "name": "Misno Sugianto",
+      "email": "misnosugianto48@gmail.com"
+    }
+  },
+  "servers": [
+    {
+      "url": "http://127.0.0.1:3000/api"
+    }
+  ],
+  "paths": {
+    "/users": {
+      "post": {
+        "tags": [
+          "users"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "username": {
+                    "type": "string",
+                    "example": "Misno Sugianto"
+                  },
+                  "email": {
+                    "type": "string",
+                    "example": "misnosugianto48@gmail.com"
+                  },
+                  "password": {
+                    "type": "string",
+                    "example": "secretPassword"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "register users",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "success"
+                    },
+                    "statusCode": {
+                      "type": "number",
+                      "example": 201
+                    },
+                    "message": {
+                      "example": "user success created"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "example": "user-caweufghar7fagsd"
+                        },
+                        "username": {
+                          "example": "Misno Sugianto"
+                        },
+                        "email": {
+                          "example": "misnosugianto48@gmail.com"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "bad request",
+            "content": {
+              "application/json":{
+                "schema":{
+                  "$ref": "#/components/schemas/400BadRequest"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/login": {
+      "post": {
+        "tags": [
+          "users"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "example": "misnosugianto48@gmail.com"
+                  },
+                  "password": {
+                    "example": "secretPassword"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "create token login",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "example": "success"
+                    },
+                    "statusCode": {
+                      "example": 201
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "accessToken": {
+                          "example": "someexampletokenjwt"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "bad request",
+            "content": {
+              "application/json":{
+                "schema":{
+                  "$ref": "#/components/schemas/400BadRequest"
+                }
+              }
+            }
+          },
+          "401":{
+            "description": "unauthorized",
+            "content": {
+              "application/json":{
+                "schema":{
+                  "$ref": "#/components/schemas/401Unauthorized"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/:id": {}
+  },
+  "components": {
+    "schemas": {
+      "400BadRequest": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "example": "fail"
+          },
+          "statusCode": {
+            "example": 400
+          },
+          "message": {
+            "example": "some message bad request"
+          }
+        }
+      },
+      "401Unauthorized":{
+        "type": "object",
+        "properties": {
+          "status": {
+            "example": "unauthorized"
+          },
+          "statusCode": {
+            "example": 401
+          },
+          "message": {
+            "example": "some message unauthorized"
+          }
+        }
+      }
+    }
+  }
+}
