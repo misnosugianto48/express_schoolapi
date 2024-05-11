@@ -1,4 +1,4 @@
-import { registerUserValidator } from "../validator/usersValidator.js"
+import { loginUserValidator, registerUserValidator } from "../validator/usersValidator.js"
 import { validate } from "../validator/validator.js"
 import {prismaClient} from '../library/database.js';
 import { ResponseError } from "../utils/errorResponse.js";
@@ -31,6 +31,33 @@ const register = async (request) => {
   });
 }
 
+const login = async (request) => {
+  const loginRequest = validate(loginUserValidator, request);
+
+  const user = await prismaClient.user.findUnique({
+    where: {
+      email: loginRequest.email,
+    },
+    select: {
+      id: true,
+      email: true,
+      password: true
+    }
+  });
+
+  if (!user) {
+    throw new ResponseError('unauthorized', 401, 'Kredensial yang diberikan salah');
+  }
+
+  const correctPassword = await bcrypt.compare(loginRequest.password, user.password);
+
+  if (!correctPassword) {
+    throw new ResponseError('unauthorized', 401, 'Kredensial yang diberikan salah');
+  }
+
+  return {userId: user.id};
+}
+
 export default {
-  register
+  register, login
 }

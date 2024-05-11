@@ -1,4 +1,5 @@
 import usersService from "../service/usersService.js";
+import jwt from 'jsonwebtoken';
 
 const register = async (req, res, next) => {
   try {
@@ -16,6 +17,23 @@ const register = async (req, res, next) => {
   }
 } 
 
+const login = async (req, res, next) => {
+  try {
+    const result = await usersService.login(req.body);
+
+    const accessToken = jwt.sign({ id: result.userId}, 'express_schoolapi', { expiresIn: '1h' });
+
+    res.cookie('jwt', accessToken, { httpOnly: true }).status(201).json({
+      status: 'success',
+      statusCode: 201,
+      message: 'User loggedin successfully',
+    });
+
+  } catch (e) {
+    next(e);
+  }
+} 
+
 export default {
-  register
+  register, login
 }

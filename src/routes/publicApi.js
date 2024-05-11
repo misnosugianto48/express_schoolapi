@@ -4,7 +4,7 @@ import usersController from "../controller/usersController.js";
 
 const publicRouter = new express.Router();
 publicRouter.post('/api/users', usersController.register);
-// publicRouter.post('/api/users/login', usersController.login);
+publicRouter.post('/api/users/login', usersController.login);
 // publicRouter.get('/ping', healthController.ping);
 
 export {
