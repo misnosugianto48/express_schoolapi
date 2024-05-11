@@ -84,7 +84,19 @@ describe('Post /api/user/login', () => {
 
   });
 
-  it('should can\'t login user', async () => {
+  it('should can\'t login user if email wrong', async () => {
+    const result = await supertest(web).post('/api/users/login').send({
+      email: 'userEmailTes@mail.com',
+      password: 'passwordTest'
+    });
+
+    expect(result.statusCode).toBe(401);
+    expect(result.headers['set-cookie']).toBeUndefined();
+    expect(result.body.message).toBe('Kredensial yang diberikan salah');
+
+  });
+
+  it('should can\'t login user if password wrong', async () => {
     const result = await supertest(web).post('/api/users/login').send({
       email: 'userEmailTest@mail.com',
       password: 'password'
@@ -97,3 +109,40 @@ describe('Post /api/user/login', () => {
   });
 })
 
+describe('Get /api/users/:id', async () => {
+  beforeAll(async () => {
+    await createTestUsers();
+  });
+
+  afterAll(async () => {
+    await deleteTestUsers();
+  });
+
+  it('should return detail user by id', async () => {
+    const result = await supertest(web).get('/api/users/:id').set('Cookie', 'jwt');
+    const cookies = result.headers['set-cookie'];
+
+    expect(result.statusCode).toBe(201);
+    expect(result.headers['set-cookie']).toBeDefined();
+    expect(cookies.length).toBeGreaterThan(0);
+    expect(result.body.message).toBe('User loggedin successfully');
+  });
+
+  it('should not return detail user if id not found', async () => {
+
+  });
+
+  it('should return unauthorized if user not login', async () => {
+
+  });
+})
+
+describe('Patch /api/users/:userId', async () => {
+  beforeAll(async () => {
+    await createTestUsers();
+  });
+
+  afterAll(async () => {
+    await deleteTestUsers();
+  });
+})
