@@ -57,7 +57,11 @@ const getUserById = async (req, res, next) => {
     res.status(200).json({
       status: 'success',
       statusCode: 200,
-      data: result
+      data: {
+        userId: result.id,
+        username: result.username,
+        email: result.email
+      }
     });
 
   } catch (e) {

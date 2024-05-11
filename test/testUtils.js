@@ -22,3 +22,11 @@ export const createTestUsers = async () => {
     }
   });
 }
+
+export const getTestUser = async () => {
+  return prismaClient.user.findFirst({
+      where: {
+          username: 'userTest'
+      }
+  });
+}

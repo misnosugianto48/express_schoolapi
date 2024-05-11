@@ -64,6 +64,7 @@ const getUserById = async (id) => {
       id: userId
     },
     select: {
+      id: true,
       username: true,
       email: true
     }
